@@ -626,8 +626,6 @@ const schema: PrepareSchema<LocalizationSchema, "" | "_plural"> = {
                 "hiddenAccounts": "Hidden accounts",
                 "primaryName": "Main account",
                 "paymentName": "Spending account {{accountIndex}}",
-                "vestingName": "Vesting account {{accountIndex}}",
-                "vestingPrimaryName": "Main vesting account",
                 "topUp": "Top up account",
                 "addNew": "Add new account",
                 "network": "{{networkName}} network",

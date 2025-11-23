@@ -2,19 +2,15 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { fragment } from "../../fragment";
 import { useCurrentAddress, useTheme } from "../../engine/hooks";
 import { useTypedNavigation } from "../../utils/useTypedNavigation";
-import { Platform, Pressable, View } from "react-native";
+import { Platform, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { ScreenHeader } from "../../components/ScreenHeader";
 import { t } from "../../i18n/t";
 import { useHoldersProfile } from "../../engine/hooks/holders/useHoldersProfile";
-import { AIChatComponent, AIChatComponentRef } from "../../components/ai/AIChatComponent";
+import { AIChatComponent } from "../../components/ai/AIChatComponent";
 import { Text } from "react-native";
 import { Typography } from "../../components/styles";
 import { useParams } from "../../utils/useParams";
-import { useRef } from "react";
-import { Image } from 'expo-image';
-import { PerfText } from "../../components/basic/PerfText";
-import { CloseButton } from "../../components/navigation/CloseButton";
 
 export const HoldersAIChatFragment = fragment(() => {
     const theme = useTheme();
@@ -23,7 +19,6 @@ export const HoldersAIChatFragment = fragment(() => {
     const navigation = useTypedNavigation();
     const { tonAddressString } = useCurrentAddress();
     const profile = useHoldersProfile(tonAddressString);
-    const chatRef = useRef<AIChatComponentRef>(null);
 
     return (
         <View style={{
@@ -35,41 +30,8 @@ export const HoldersAIChatFragment = fragment(() => {
                 ios: 'light'
             })} />
             <ScreenHeader
-                titleComponent={
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Pressable
-                            onPress={() => chatRef.current?.clearHistory()}
-                            style={({ pressed }) => ({
-                                opacity: pressed ? 0.5 : 1,
-                                marginRight: 16,
-                                backgroundColor: theme.surfaceOnElevation,
-                                borderRadius: 32,
-                                height: 32, width: 32,
-                                justifyContent: 'center', alignItems: 'center',
-                            })}
-                        >
-                            <Image
-                                source={require('@assets/ic-reload.png')}
-                                style={{
-                                    width: 24,
-                                    height: 24,
-                                }}
-                                tintColor={theme.iconNav}
-                            />
-                        </Pressable>
-                        <View style={{ flexGrow: 1 }} />
-                        <PerfText style={[{ color: theme.textPrimary, maxWidth: '60%' }, Typography.semiBold17_24]}
-                            ellipsizeMode={'tail'}
-                            numberOfLines={1}
-                        >
-                            {t('aiChat.title')}
-                        </PerfText>
-                        <View style={{ flexGrow: 1 }} />
-                        <CloseButton
-                            onPress={navigation.goBack}
-                        />
-                    </View>
-                }
+                title={t('aiChat.title')}
+                onBackPressed={navigation.goBack}
                 style={[
                     { paddingHorizontal: 16 },
                     Platform.select({ android: { marginTop: safeArea.top } })
@@ -78,7 +40,6 @@ export const HoldersAIChatFragment = fragment(() => {
             <View style={{ flexGrow: 1, marginTop: 16 }}>
                 {profile.data?.userId ? (
                     <AIChatComponent
-                        ref={chatRef}
                         userId={userId || profile.data.userId}
                         autoConnect={true}
                         persistHistory={false}

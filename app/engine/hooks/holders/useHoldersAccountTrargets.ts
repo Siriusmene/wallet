@@ -1,7 +1,7 @@
 import { Address } from "@ton/core";
 import { useMemo } from "react";
 import { useHoldersAccounts } from "./useHoldersAccounts";
-import { AccountType, GeneralHoldersAccount } from "../../api/holders/fetchAccounts";
+import { GeneralHoldersAccount } from "../../api/holders/fetchAccounts";
 import { hasDirectTonDeposit } from "../../../utils/holders/hasDirectDeposit";
 
 export type HoldersAccountTarget = {
@@ -9,7 +9,6 @@ export type HoldersAccountTarget = {
     memo: string | undefined,
     name: string | null | undefined,
     accountIndex: number,
-    accountType: AccountType,
     jettonMaster: string | null | undefined,
     symbol: string,
 }
@@ -26,7 +25,6 @@ export function mapHoldersAccountTarget(account: GeneralHoldersAccount): Holders
         memo,
         name: account.name,
         accountIndex: account.accountIndex,
-        accountType: account.type || 'crypto',
         jettonMaster: account.cryptoCurrency.tokenContract,
         symbol: account.cryptoCurrency.ticker
     };
@@ -65,8 +63,7 @@ export function useHoldersAccountTrargets(address: string | Address, solanaAddre
                     name: item.name,
                     accountIndex: item.accountIndex,
                     jettonMaster: item.cryptoCurrency.tokenContract,
-                    symbol: item.cryptoCurrency.ticker,
-                    accountType: item.type || 'crypto',
+                    symbol: item.cryptoCurrency.ticker
                 };
             });
     }, [data?.accounts, data?.type]);
